@@ -1,23 +1,21 @@
-﻿#r "Newtonsoft.Json"
+﻿using System.Net;
 
-using System;
-using System.Net;
-using Newtonsoft.Json;
-
-public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
+public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log)
 {
-    log.Info($"Webhook was triggered!");
+    log.Info($"C# HTTP trigger function processed a request. RequestUri={req.RequestUri}");
 
-    string jsonContent = await req.Content.ReadAsStringAsync();
-    dynamic data = JsonConvert.DeserializeObject(jsonContent);
+    // parse query parameter
+    string name = req.GetQueryNameValuePairs()
+        .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
+        .Value;
 
-    if (data.first == null || data.last == null) {
-        return req.CreateResponse(HttpStatusCode.BadRequest, new {
-            error = "Please pass first/last properties in the input object"
-        });
-    }
+    // Get request body
+    dynamic data = await req.Content.ReadAsAsync<object>();
 
-    return req.CreateResponse(HttpStatusCode.OK, new {
-        greeting = $"Portal Link: {context.portalLink}"
-    });
+    // Set name to query string or body data
+    name = name ?? data?.context?.resourceName.ToString(); 
+
+    return name == null
+        ? req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body")
+        : req.CreateResponse(HttpStatusCode.OK, $"Hello {name}");
 }
