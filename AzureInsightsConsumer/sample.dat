@@ -1,0 +1,23 @@
+{
+        "version": "1.0",
+        "status": "Activated",
+        "operation": "Scale In",
+        "context": {
+                "timestamp": "2016-03-11T07:31:04.5834118Z",
+                "id": "/subscriptions/s1/resourceGroups/rg1/providers/microsoft.insights/autoscalesettings/myautoscaleSetting",
+                "name": "myautoscaleSetting",
+                "details": "Autoscale successfully started scale operation for resource 'MyCSRole' from capacity '3' to capacity '2'",
+                "subscriptionId": "s1",
+                "resourceGroupName": "rg1",
+                "resourceName": "MyCSRole",
+                "resourceType": "microsoft.classiccompute/domainnames/slots/roles",
+                "resourceId": "/subscriptions/s1/resourceGroups/rg1/providers/microsoft.classicCompute/domainNames/myCloudService/slots/Production/roles/MyCSRole",
+                "portalLink": "https://portal.azure.com/#resource/subscriptions/s1/resourceGroups/rg1/providers/microsoft.classicCompute/domainNames/myCloudService",
+                "oldCapacity": "3",
+                "newCapacity": "2"
+        },
+        "properties": {
+                "key1": "value1",
+                "key2": "value2"
+        }
+}
