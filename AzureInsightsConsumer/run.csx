@@ -4,18 +4,16 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
 {
     log.Info($"C# HTTP trigger function processed a request. RequestUri={req.RequestUri}");
 
-    // parse query parameter
-    string name = req.GetQueryNameValuePairs()
-        .FirstOrDefault(q => string.Compare(q.Key, "name", true) == 0)
-        .Value;
-
     // Get request body
     dynamic data = await req.Content.ReadAsAsync<object>();
 
-    // Set name to query string or body data
-    name = name ?? data?.context?.resourceName.ToString(); 
+    // Gets the name of the resource from the Auto-Scale event.
+    name = data?.context?.resourceName.ToString();
+    operation = data?.operation;
+
+    log.Info($"Resource: '{name}' is performing a {operation} operation.")
 
     return name == null
-        ? req.CreateResponse(HttpStatusCode.BadRequest, "Please pass a name on the query string or in the request body")
+        ? req.CreateResponse(HttpStatusCode.BadRequest, "This is not a valid auto-scale payload.")
         : req.CreateResponse(HttpStatusCode.OK, $"Hello {name}");
 }
